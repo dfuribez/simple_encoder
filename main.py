@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QRadioButton
 
 from utils import base
 from utils import htmle
-from utils import unicode
+from utils import url
 
 executing_dir = os.path.dirname(sys.argv[0])
 
@@ -14,7 +14,8 @@ gui_class = uic.loadUiType(os.path.join(executing_dir, "gui/main.ui"))[0]
 
 ALGORITHMS = {
     "base64": base,
-    "html": htmle
+    "html": htmle,
+    "url": url
 }
 
 class Encoder(QMainWindow, gui_class):
