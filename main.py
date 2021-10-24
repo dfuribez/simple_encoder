@@ -20,10 +20,11 @@ ALGORITHMS = {
 
 class Encoder(QMainWindow, gui_class):
     
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, clipboard=None):
         
         QMainWindow.__init__(self)
         self.setupUi(self)
+        self.clipboard = clipboard
 
         self.algorithm = None
 
@@ -32,6 +33,7 @@ class Encoder(QMainWindow, gui_class):
         self.cmdEncode.clicked.connect(lambda x: self.encode_decode("encode"))
         self.cmdDecode.clicked.connect(lambda x: self.encode_decode("decode"))
         self.cmdO2I.clicked.connect(self.out2in)
+        self.cmdCopy.clicked.connect(self.copy)
     
 
     def encode_decode(self, option="encode"):
@@ -53,9 +55,14 @@ class Encoder(QMainWindow, gui_class):
     def out2in(self):
         self.txtInput.setPlainText(self.txtOutput.toPlainText())
         self.txtOutput.setText("")
+    
+    
+    def copy(self):
+        self.clipboard.setText(self.txtOutput.toPlainText())
 
 
 app = QApplication(sys.argv)
-gui = Encoder(None)
+clipboard = app.clipboard()
+gui = Encoder(None, clipboard)
 gui.show()
 app.exec_()
