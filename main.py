@@ -8,7 +8,9 @@ from utils import base
 from utils import htmle
 from utils import unicode
 
-gui_class = uic.loadUiType("gui/main.ui")[0]
+executing_dir = os.path.dirname(sys.argv[0])
+
+gui_class = uic.loadUiType(os.path.join(executing_dir, "gui/main.ui"))[0]
 
 ALGORITHMS = {
     "base64": base,
