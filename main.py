@@ -1,5 +1,6 @@
 import os
 import sys
+import json
 
 from PyQt5 import QtCore, uic, QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QMainWindow, QRadioButton
@@ -8,6 +9,9 @@ from utils import base
 from utils import htmle
 from utils import url
 from utils import unicode
+from utils import hex
+from utils import jwt
+
 
 executing_dir = os.path.dirname(sys.argv[0])
 
@@ -17,7 +21,8 @@ ALGORITHMS = {
     "base64": base,
     "html": htmle,
     "url": url,
-    "unicode": unicode
+    "unicode": unicode,
+    "hex": hex
 }
 
 class Encoder(QMainWindow, gui_class):
@@ -36,6 +41,8 @@ class Encoder(QMainWindow, gui_class):
         self.cmdDecode.clicked.connect(lambda x: self.encode_decode("decode"))
         self.cmdO2I.clicked.connect(self.out2in)
         self.cmdCopy.clicked.connect(self.copy)
+
+        self.txtJwtEncoded.textChanged.connect(self.jwt_changed)
     
 
     def encode_decode(self, option="encode"):
@@ -61,6 +68,26 @@ class Encoder(QMainWindow, gui_class):
     
     def copy(self):
         self.clipboard.setText(self.txtOutput.toPlainText())
+
+
+    def jwt_changed(self):
+        token = self.txtJwtEncoded.toPlainText()
+        header, payload, signature = jwt.process(token)
+
+        try:
+            pretty_payload = json.dumps(json.loads(payload), indent=2, sort_keys=False)
+        except:
+            pretty_payload = payload
+        
+        try:
+            pretty_header = json.dumps(json.loads(header), indent=2, sort_keys=False)
+        except:
+            pretty_header = header
+
+        self.txtJwtHeader.setPlainText(pretty_header)
+        self.txtJwtPayload.setPlainText(pretty_payload)
+        self.txtJwtSignature.setPlainText(signature)
+        
 
 
 app = QApplication(sys.argv)

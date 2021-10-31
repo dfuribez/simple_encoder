@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>570</width>
-    <height>670</height>
+    <width>561</width>
+    <height>665</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <item row="0" column="0">
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab">
        <attribute name="title">
@@ -143,12 +143,26 @@ p, li { white-space: pre-wrap; }
        <attribute name="title">
         <string>jwt</string>
        </attribute>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QTextEdit" name="txtJwtEncoded"/>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="QTextEdit" name="txtJwtEncoded">
+          <property name="maximumSize">
+           <size>
+            <width>259</width>
+            <height>16777215</height>
+           </size>
+          </property>
+         </widget>
         </item>
-        <item>
-         <widget class="QTextEdit" name="txtJwtDecoded"/>
+        <item row="0" column="1">
+         <widget class="QSplitter" name="splitter">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <widget class="QTextEdit" name="txtJwtHeader"/>
+          <widget class="QTextEdit" name="txtJwtPayload"/>
+          <widget class="QTextEdit" name="txtJwtSignature"/>
+         </widget>
         </item>
        </layout>
       </widget>
