@@ -42,7 +42,10 @@ class Encoder(QMainWindow, gui_class):
         self.cmdO2I.clicked.connect(self.out2in)
         self.cmdCopy.clicked.connect(self.copy)
 
-        self.txtJwtEncoded.textChanged.connect(self.jwt_changed)
+        self.cmdDecodeJwt.clicked.connect(self.jwt_decode)
+
+        self.txtJwtHeader.textChanged.connect(self.jwt_decoded_changed)
+        self.txtJwtPayload.textChanged.connect(self.jwt_decoded_changed)
     
 
     def encode_decode(self, option="encode"):
@@ -70,7 +73,7 @@ class Encoder(QMainWindow, gui_class):
         self.clipboard.setText(self.txtOutput.toPlainText())
 
 
-    def jwt_changed(self):
+    def jwt_decode(self):
         token = self.txtJwtEncoded.toPlainText()
         header, payload, signature = jwt.process(token)
 
@@ -88,6 +91,15 @@ class Encoder(QMainWindow, gui_class):
         self.txtJwtPayload.setPlainText(pretty_payload)
         self.txtJwtSignature.setPlainText(signature)
         
+
+    def jwt_decoded_changed(self):
+        header = self.txtJwtHeader.toPlainText()
+        payload = self.txtJwtPayload.toPlainText()
+        signature = self.txtJwtSignature.toPlainText()
+
+        self.changed = True
+        encoded = jwt.encode(header, payload, signature)
+        self.txtJwtEncoded.setPlainText(encoded)
 
 
 app = QApplication(sys.argv)
