@@ -12,6 +12,7 @@ def encode(string: str) -> str:
 
 def decode(string: str) -> str:
     try:
+        string += "=="
         decoded = base64.b64decode(string.encode("utf8")).decode("utf8")
     except Exception as e:
         decoded = str(e)
