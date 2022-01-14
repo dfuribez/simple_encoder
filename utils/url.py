@@ -4,6 +4,7 @@ import urllib.parse
 def encode(string: str) -> str:
     try:
         encode = urllib.parse.quote(string)
+        encode = encode.replace(".", "%2e")
     except Exception as e:
         encode = str(e)
     
