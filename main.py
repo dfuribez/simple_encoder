@@ -48,14 +48,26 @@ class Encoder(QMainWindow, gui_class):
         self.txtJwtPayload.textChanged.connect(self.jwt_decoded_changed)
     
 
+    def call_function(self, function, param, times):
+        buffer = param
+        for _ in range(times):
+            buffer = function(buffer)
+        return buffer
+
+
     def encode_decode(self, option="encode"):
         self.get_algorithm()
+        times = 1
+        if self.checkDouble.isChecked():
+            times = 2
+        
         to_encode = self.txtInput.toPlainText()
         if option == "encode":
-            encoded = self.algorithm.encode(to_encode)
+            encoded = self.call_function(self.algorithm.encode, to_encode, times)
         else:
-            encoded = self.algorithm.decode(to_encode)
-        self.txtOutput.setPlainText(encoded)    
+            encoded = self.call_function(self.algorithm.decode, to_encode, times)
+        self.txtOutput.setPlainText(encoded)
+
 
 
     def get_algorithm(self):
