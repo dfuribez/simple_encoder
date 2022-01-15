@@ -1,7 +1,7 @@
 import html
 
 
-def encode(string: str) -> str:
+def encode(string: str, **kwargs) -> str:
     try:
         encoded = html.escape(string)
     except Exception as e:
@@ -10,7 +10,7 @@ def encode(string: str) -> str:
     return encoded
 
 
-def decode(string: str) -> str:
+def decode(string: str, **kwargs) -> str:
     try:
         decoded = html.unescape(string)
     except Exception as e:

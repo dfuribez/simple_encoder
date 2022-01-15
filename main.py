@@ -1,6 +1,7 @@
 import os
 import sys
 import json
+import random
 
 from PyQt5 import QtCore, uic, QtWidgets, QtGui
 from PyQt5.QtWidgets import QApplication, QMainWindow, QRadioButton
@@ -11,6 +12,8 @@ from utils import url
 from utils import unicode
 from utils import hex
 from utils import jwt
+from utils import binary
+from utils import octal
 
 
 executing_dir = os.path.dirname(sys.argv[0])
@@ -22,7 +25,9 @@ ALGORITHMS = {
     "html": htmle,
     "url": url,
     "unicode": unicode,
-    "hex": hex
+    "hex": hex,
+    "bin": binary,
+    "octal": octal
 }
 
 class Encoder(QMainWindow, gui_class):
@@ -46,12 +51,33 @@ class Encoder(QMainWindow, gui_class):
 
         self.txtJwtHeader.textChanged.connect(self.jwt_decoded_changed)
         self.txtJwtPayload.textChanged.connect(self.jwt_decoded_changed)
-    
+
+        self.txtInput.textChanged.connect(self.info)
+        self.txtOutput.textChanged.connect(self.info)
+
+        # Labels
+
+        self.lblInfoInput.setText("Lenght: 0")
+        self.lblInfoOutput.setText("Lenght: 0")
+
+
+    def random_choice(self, params, **kwargs):
+        buffer = ""
+        for _ in params:
+            if random.randint(0, 1):
+                buffer += self.algorithm.encode(_, **kwargs)
+            else:
+                buffer += _
+        return buffer
+
 
     def call_function(self, function, param, times):
+        if self.checkRandom.isChecked():
+            function = self.random_choice
+
         buffer = param
         for _ in range(times):
-            buffer = function(buffer)
+            buffer = function(buffer, sep=self.txtSeparator.text())
         return buffer
 
 
@@ -69,17 +95,16 @@ class Encoder(QMainWindow, gui_class):
         self.txtOutput.setPlainText(encoded)
 
 
-
     def get_algorithm(self):
         for algo in self.groupOptions.findChildren(QRadioButton):
             if algo.isChecked():
                 self.algorithm = ALGORITHMS[algo.text().lower()]
-    
+
 
     def out2in(self):
         self.txtInput.setPlainText(self.txtOutput.toPlainText())
         self.txtOutput.setText("")
-    
+
     
     def copy(self):
         self.clipboard.setText(self.txtOutput.toPlainText())
@@ -112,6 +137,13 @@ class Encoder(QMainWindow, gui_class):
         self.changed = True
         encoded = jwt.encode(header, payload, signature)
         self.txtJwtEncoded.setPlainText(encoded)
+    
+
+    def info(self):
+        input_text = self.txtInput.toPlainText()
+        output_text = self.txtOutput.toPlainText()
+        self.lblInfoInput.setText("Lenght: {0}, words: {1}".format(len(input_text), len(input_text.split(" "))))
+        self.lblInfoOutput.setText("Lenght: {0}, words: {1}".format(len(output_text), len(output_text.split(" "))))
 
 
 app = QApplication(sys.argv)

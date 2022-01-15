@@ -1,6 +1,6 @@
 base = "\\u{:>04}"
 
-def encode(string: str) -> str:
+def encode(string: str, **kwargs) -> str:
     buffer = ""
     try:
         for char in bytearray(string, "utf8"):
@@ -11,7 +11,7 @@ def encode(string: str) -> str:
     return buffer
 
 
-def decode(string: str) -> str:
+def decode(string: str, **kwargs) -> str:
     #string = string.encode("utf8")
     for x in string:
         print(chr(x))
