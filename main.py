@@ -39,6 +39,7 @@ class Encoder(QMainWindow, gui_class):
         self.clipboard = clipboard
 
         self.algorithm = None
+        self.action = None
 
         # Buttons
 
@@ -52,7 +53,7 @@ class Encoder(QMainWindow, gui_class):
         self.txtJwtHeader.textChanged.connect(self.jwt_decoded_changed)
         self.txtJwtPayload.textChanged.connect(self.jwt_decoded_changed)
 
-        self.txtInput.textChanged.connect(self.info)
+        self.txtInput.textChanged.connect(self.input_changed)
         self.txtOutput.textChanged.connect(self.info)
 
         # Labels
@@ -82,6 +83,7 @@ class Encoder(QMainWindow, gui_class):
 
 
     def encode_decode(self, option="encode"):
+        self.action = option
         self.get_algorithm()
         times = 1
         if self.checkDouble.isChecked():
@@ -138,6 +140,10 @@ class Encoder(QMainWindow, gui_class):
         encoded = jwt.encode(header, payload, signature)
         self.txtJwtEncoded.setPlainText(encoded)
     
+
+    def input_changed(self):
+        self.encode_decode(self.action)
+
 
     def info(self):
         input_text = self.txtInput.toPlainText()
