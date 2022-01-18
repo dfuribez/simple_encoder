@@ -76,7 +76,7 @@
             </widget>
            </item>
            <item>
-            <widget class="QRadioButton" name="radioButton">
+            <widget class="QRadioButton" name="optHex">
              <property name="text">
               <string>Hex</string>
              </property>

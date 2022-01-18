@@ -30,16 +30,31 @@ ALGORITHMS = {
     "octal": octal
 }
 
+
 class Encoder(QMainWindow, gui_class):
     
     def __init__(self, parent=None, clipboard=None):
         
         QMainWindow.__init__(self)
         self.setupUi(self)
+
+        ELEMENTS = [
+            self.optBase64,
+            self.optHtml,
+            self.optUrl,
+            self.optUnicode,
+            self.optBin,
+            self.optHex,
+            self.optOctal,
+            self.checkDouble,
+            self.checkRandom,
+            self.checkUpper
+        ]
+
         self.clipboard = clipboard
 
         self.algorithm = None
-        self.action = None
+        self.action = "encode"
 
         # Buttons
 
@@ -55,6 +70,9 @@ class Encoder(QMainWindow, gui_class):
 
         self.txtInput.textChanged.connect(self.input_changed)
         self.txtOutput.textChanged.connect(self.info)
+
+        for _ in ELEMENTS:
+            _.clicked.connect(self.input_changed)
 
         # Labels
 
@@ -158,6 +176,7 @@ class Encoder(QMainWindow, gui_class):
         output_text = self.txtOutput.toPlainText()
         self.lblInfoInput.setText("Lenght: {0}, words: {1}".format(len(input_text), len(input_text.split(" "))))
         self.lblInfoOutput.setText("Lenght: {0}, words: {1}".format(len(output_text), len(output_text.split(" "))))
+
 
 
 app = QApplication(sys.argv)
