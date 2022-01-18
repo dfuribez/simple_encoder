@@ -62,11 +62,14 @@ class Encoder(QMainWindow, gui_class):
         self.lblInfoOutput.setText("Lenght: 0")
 
 
-    def random_choice(self, params, **kwargs):
+    def random_choice(self, params, upper=False, **kwargs):
         buffer = ""
         for _ in params:
             if random.randint(0, 1):
-                buffer += self.algorithm.encode(_, **kwargs)
+                if not upper:
+                    buffer += self.algorithm.encode(_, **kwargs)
+                else:
+                    buffer += _.upper()
             else:
                 buffer += _
         return buffer
@@ -83,13 +86,18 @@ class Encoder(QMainWindow, gui_class):
 
 
     def encode_decode(self, option="encode"):
+        if option is None:
+            return
         self.action = option
         self.get_algorithm()
         times = 1
         if self.checkDouble.isChecked():
             times = 2
-        
+
         to_encode = self.txtInput.toPlainText()
+
+        if self.checkUpper.isChecked() and option == "encode":
+            to_encode = self.random_choice(to_encode, True)
         if option == "encode":
             encoded = self.call_function(self.algorithm.encode, to_encode, times)
         else:
